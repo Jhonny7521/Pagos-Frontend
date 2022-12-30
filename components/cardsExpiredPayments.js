@@ -3,7 +3,7 @@ import APIDATA from "../js/apiDataStorage.js"
 function findPaymentAndService(id){
   let objPaymentAndService = {};
   const payments = APIDATA.payments;
-  console.log(payments.results)
+  // console.log(payments.results)
 
   payments.results.forEach( (value) => {
     if (value.id == id) {
@@ -30,7 +30,7 @@ function findPaymentAndService(id){
 function renderExpiredPayments(expired_payment){
   const servideObj = findPaymentAndService(expired_payment.Payment_user_id)
   return `
-    <div class="card border-info mb-3 p-2">
+    <div class="card border-danger mb-3 p-2">
       <div class="row">
         <div class="col d-flex flex-row justify-content-start align-items-center">
           <img src="${servideObj.Service_logo}" class="rounded mx-2" style="width: 40px ">

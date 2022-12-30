@@ -1,5 +1,7 @@
 import Header from "../components/Header.js";
 import APIDATA from "../js/apiDataStorage.js";
+import DOMHandler from "../js/DOMHandler.js";
+import Home from "./home.js";
 
 // Función que retorna la estructura de la SPA.
 function view(){
@@ -59,10 +61,18 @@ function createPayment() {
   const paymentForm = document.querySelector(".register-form")
   paymentForm.addEventListener("submit",async (e) => {
     e.preventDefault()
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, '0'); // añade un cero a la izquierda si el día es menor de 10
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0'); //obtiene el mes (0 = enero, 1 = febrero, etc.), añade un cero a la izquierda si el mes es menor de 10
+    const año = hoy.getFullYear(); 
+    
+    const fechaActual = año + '-' + mes + '-' + dia; 
+    
     const {user_id, amount, expiration_date, service_id} = e.target.elements
     const new_payment = {
       'User_id': user_id.value,
       'Amount': amount.value,
+      'PaymentDate': fechaActual,
       'ExpirationDate': expiration_date.value,
       'Service_id': service_id.value
     }
@@ -76,10 +86,12 @@ function createPayment() {
         body: JSON.stringify(new_payment),
       });
       const data = await response.json();
-      console.log(data)
+      // console.log(data)
     } catch (error) {
       console.log(error);
     }
+    await APIDATA.fetchPayments()
+    await APIDATA.fetchExpiredPayments()
 
     DOMHandler.load(Home);
   })

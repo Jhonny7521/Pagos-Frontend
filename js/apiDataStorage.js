@@ -18,6 +18,7 @@ const APIDATA = {
   services: [],
   payments: [],
   expiredPayments: [],
+  selectedService: [],
   errors: null,
   // categories: [],
   // active_category: 0,
