@@ -1,6 +1,7 @@
 import Login from "./login.js";
 import DOMHandler from "../js/DOMHandler.js";
 import APIDATA from "../js/apiDataStorage.js";
+import Home from "./home.js";
 
 //Función que retorna la estructura del Header de la SPA.
 const view = () =>{
