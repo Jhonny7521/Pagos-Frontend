@@ -7,6 +7,7 @@ import renderExpiredPayments from "../components/cardsExpiredPayments.js";
 function view(){
   const payments = APIDATA.payments.results;
   const expiredPayments = APIDATA.expiredPayments;
+  // console.log(payments)
   return `
     ${Header}
     <div class="container col-9">

@@ -1,4 +1,4 @@
-import { getServices, getPayments, getExpiredPayments } from "./fetchServices.js";
+import { getServices, getPayments, getExpiredPayments } from "./fetchServicesFunctions.js";
 
 
 async function fetchServices(){
@@ -16,17 +16,12 @@ async function fetchExpiredPayments(){
 
 const APIDATA = {
   base_uri: 'https://pagos-api-production.up.railway.app/',
+  // base_uri: 'http://127.0.0.1:8000/',
   services: [],
   payments: [],
   expiredPayments: [],
   selectedService: [],
   errors: null,
-  // categories: [],
-  // active_category: 0,
-  // filter_products: [],
-  // search: false,
-  // errors: null,
-  // query: "",
   fetchServices,
   fetchPayments,
   fetchExpiredPayments

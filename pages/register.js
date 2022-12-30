@@ -101,6 +101,10 @@ function RegisterUser() {
         localStorage.setItem('usuario', userJson)
         localStorage.setItem('auth_token', data.tokens.access)
         localStorage.setItem('refresh_token', data.tokens.refresh)
+
+        await APIDATA.fetchServices()
+        await APIDATA.fetchPayments()
+        await APIDATA.fetchExpiredPayments()
       }
     } catch (error) {
       console.log(error);

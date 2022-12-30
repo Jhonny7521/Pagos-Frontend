@@ -61,15 +61,10 @@ function updateService() {
     }
     
     try {
-      const response = await fetch(`${APIDATA.base_uri}api/v2/servicios/${serviceId.value}/`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(new_service),
-      });
+      const response = await queryToAPI(`api/v2/servicios/${serviceId.value}/`, 'PUT', new_service); 
       const data = await response.json();
-      console.log(data)
+
+      // console.log(data)
     } catch (error) {
       console.log(error);
     }
