@@ -78,7 +78,7 @@ function createPayment() {
     }
     
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/v2/pagos/", {
+      const response = await fetch(`${APIDATA.base_uri}api/v2/pagos/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -105,7 +105,7 @@ const AddPaymet = {
     return view();
   },
   setListeners(){
-    Header.setListeners()
+    Header.setListeners();
     createPayment();
   }
 }

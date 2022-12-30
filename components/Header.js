@@ -3,6 +3,7 @@ import Home from "../pages/home.js";
 import AddPaymet from "../pages/add_payment.js";
 import Services from "../pages/services.js";
 import { getUserData } from "../js/usefulFunctions.js";
+import Login from "../pages/login.js";
 
 //Función que retorna la estructura del Header de la SPA.
 const view = () =>{
@@ -39,7 +40,7 @@ const view = () =>{
           </div>
           <div class="ms-2 text-center" >
             <p class="fw-bold m-0 text-info text-center">${userdata.username}</p>
-            <a class="btn btn-outline-info py-0 px-2" type="submit">Cerrar sesión</a>
+            <a class="btn btn-outline-info py-0 px-2" type="submit" id="logout">Cerrar sesión</a>
           </div>
         </div>
       </div>
@@ -67,6 +68,13 @@ function NavbarOptions(){
   ServicesLink.addEventListener("click", (e) => {
     e.preventDefault()
     DOMHandler.load(Services)
+  })
+  
+  const logout = document.querySelector('#logout')
+  logout.addEventListener("click", (e) => {
+    e.preventDefault()
+    localStorage.clear();
+    DOMHandler.load(Login)
   })
 }
 

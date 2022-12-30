@@ -1,7 +1,7 @@
 import Header from "../components/Header.js";
 import APIDATA from "../js/apiDataStorage.js";
 import DOMHandler from "../js/DOMHandler.js";
-import Home from "./home.js";
+import Services from "./services.js";
 
 // Función que retorna la estructura de la SPA.
 function view(){
@@ -60,7 +60,7 @@ function createService() {
     }
     
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/v2/servicios/", {
+      const response = await fetch(`${APIDATA.base_uri}api/v2/servicios/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -74,7 +74,7 @@ function createService() {
     }
     await APIDATA.fetchServices()
 
-    DOMHandler.load(Home);
+    DOMHandler.load(Services);
   })
 }
 

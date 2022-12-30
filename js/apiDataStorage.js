@@ -15,6 +15,7 @@ async function fetchExpiredPayments(){
 
 
 const APIDATA = {
+  base_uri: 'https://pagos-api-production.up.railway.app/',
   services: [],
   payments: [],
   expiredPayments: [],

@@ -61,7 +61,7 @@ function ServicesLinks(){
         const serviceId = e.target.dataset.id
         
         try {
-          const response = await fetch(`http://127.0.0.1:8000/api/v2/servicios/${serviceId}/`, {
+          const response = await fetch(`${APIDATA.base_uri}api/v2/servicios/${serviceId}/`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
@@ -84,10 +84,11 @@ function ServicesLinks(){
 
 const Services = {
   toString(){
-    return view()
+    return view();
   },
   setListeners(){
-    ServicesLinks()
+    Header.setListeners();
+    ServicesLinks();
   }
 }
 

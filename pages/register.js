@@ -1,5 +1,6 @@
-import Login from "./login.js"
-import DOMHandler from "../js/DOMHandler.js"
+import Login from "./login.js";
+import DOMHandler from "../js/DOMHandler.js";
+import APIDATA from "../js/apiDataStorage.js";
 
 //Función que retorna la estructura del Header de la SPA.
 const view = () =>{
@@ -83,7 +84,7 @@ function RegisterUser() {
     }
     
     try {
-      const response = await fetch("http://localhost:8000/users/signup/", {
+      const response = await fetch(`${APIDATA.base_uri}users/signup/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

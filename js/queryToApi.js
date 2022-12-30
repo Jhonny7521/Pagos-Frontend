@@ -1,4 +1,6 @@
-const BASE_URI = 'http://127.0.0.1:8000'; // Uri para conexión con el servidor servidor
+
+// const BASE_URI = 'https://pagos-api-production.up.railway.app/'; // Uri para conexión con el servidor servidor
+const BASE_URI = 'https://pagos-api-production.up.railway.app/'; // Uri para conexión con el servidor servidor
 // const BASE_URI = 'http://127.0.0.1:5000/api/'; // Uri para conexión con el servidor servidor
 
 // Método que realiza la consulta a la api para obtener los datos según el endpoint.

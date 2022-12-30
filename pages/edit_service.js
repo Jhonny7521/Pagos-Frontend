@@ -61,7 +61,7 @@ function updateService() {
     }
     
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/v2/servicios/${serviceId.value}/`, {
+      const response = await fetch(`${APIDATA.base_uri}api/v2/servicios/${serviceId.value}/`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
