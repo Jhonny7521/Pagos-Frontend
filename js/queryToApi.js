@@ -59,7 +59,7 @@ async function queryToAPI(endPoint, method, bodyData){
     }
     response = await fetch(apiURL, fetchData)
     data = await response.json();
-    return data;
+    return data
   } 
   
   catch (error) {

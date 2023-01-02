@@ -19,9 +19,9 @@ const view = () =>{
   </div>
   <br>
   <br>
-  <div id="container-login" class="card mx-auto" style="width: 20rem;">
+  <div id="container-login" class="card mx-auto border-primary shadow-lg p-3 mb-5 bg-body rounded" style="width: 20rem;">
     <div class="d-flex justify-content-center mt-4">
-      <h3 class="card-title">Iniciar sesión</h3>
+      <h3 class="card-title text-primary">Iniciar sesión</h3>
     </div>
     <br>
     <div class="card-body">
@@ -72,8 +72,17 @@ function LoginUser() {
       body: JSON.stringify(user),
     });
     const data = await response.json();
-    if (data) {
-      // setToken(data.access);
+    // console.log(data)
+    if (data.message === 'Logeado correctamente') {
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `Bienvenido ${data.user_data.username}`,
+        showConfirmButton: false,
+        timer: 2000
+      })
+
       const userJson = JSON.stringify(data.user_data);
       localStorage.setItem('usuario', userJson)
       localStorage.setItem('auth_token', data.tokens.access)

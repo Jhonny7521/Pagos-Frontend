@@ -4,7 +4,8 @@ import Header from "../components/Header.js";
 import AddService from "./add_service.js";
 import DOMHandler from "../js/DOMHandler.js";
 import EditService from "./edit_service.js";
-import { getSelectedService } from "../js/usefulFunctions.js";
+import { getObjectSelected } from "../js/usefulFunctions.js";
+import Home from "./home.js";
 
 const view = () => {
   const services = APIDATA.services
@@ -45,7 +46,7 @@ function ServicesLinks(){
     editLinks.forEach( (element) => {
       element.addEventListener("click", (e) => {
         e.preventDefault()
-        APIDATA.selectedService = getSelectedService(e.target.dataset.id)
+        APIDATA.selectedService = getObjectSelected(e.target.dataset.id, APIDATA.services)
         DOMHandler.load(EditService)
       })
     })
@@ -58,23 +59,47 @@ function ServicesLinks(){
       element.addEventListener("click", async (e) => {
         e.preventDefault()
         
-        const serviceId = e.target.dataset.id
-        
-        try {
-          const response = await fetch(`${APIDATA.base_uri}api/v2/servicios/${serviceId}/`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
+        /* SWEET ALERT*/
+        Swal.fire({
+          title: 'Estas seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Sí, bórralo!'
+        }).then( async (result) => {
+          
+          if (result.isConfirmed) {
+
+            const serviceId = e.target.dataset.id
+            const accessToken = localStorage.getItem('auth_token')
+
+            try {
+              const response = await fetch(`${APIDATA.base_uri}api/v2/servicios/${serviceId}/`, {
+                method: "DELETE",
+                headers: {
+                  'Authorization': `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                }
+              });
+              
+              if(response.ok){
+                Swal.fire(
+                  'Eliminado!',
+                  'El servicio ha sido eliminado.',
+                  'success'
+                )              
+                await APIDATA.fetchServices()
+                DOMHandler.reload();
+              }
+
+            } catch (error) {
+              console.log(error);
             }
-          });
-          // const data = await response.json();
-          // console.log(data)
-        } catch (error) {
-          console.log(error);
-        }
-        await APIDATA.fetchServices()
-    
-        DOMHandler.reload();
+          }
+        })
+        /* SWEET ALERT*/     
       })
     })
 

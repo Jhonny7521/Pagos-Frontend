@@ -2,6 +2,7 @@ import Header from "../components/Header.js";
 import APIDATA from "../js/apiDataStorage.js";
 import DOMHandler from "../js/DOMHandler.js";
 import Services from "./services.js";
+import queryToAPI from "../js/queryToApi.js";
 
 // Función que retorna la estructura de la SPA.
 function view(){
@@ -60,16 +61,25 @@ function createService() {
     }
     
     try {
-      const response = await queryToAPI('api/v2/servicios/', 'POST', new_service);      
-      const data = await response.json();
+      const data = await queryToAPI('api/v2/servicios/', 'POST', new_service);      
+      
+      if(data){
+        Swal.fire({
+          icon: 'success',
+          title: 'Correcto',
+          text: 'Se ha creado un nuevo servicio',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        await APIDATA.fetchServices()
+    
+        DOMHandler.load(Services);
+      }
       
     } catch (error) {
       console.log(error);
     }
 
-    await APIDATA.fetchServices()
-
-    DOMHandler.load(Services);
   })
 }
 

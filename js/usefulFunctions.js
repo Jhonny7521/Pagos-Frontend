@@ -1,4 +1,3 @@
-import APIDATA from "./apiDataStorage.js";
 
 export function getUserData(){
   let userdata = localStorage.getItem('usuario')
@@ -6,13 +5,12 @@ export function getUserData(){
   return userObj;
 }
 
-export function getSelectedService(id){
-  const services = APIDATA.services
-  const selectedService = services.find( (service) => service.id === Number(id) )
+export function getObjectSelected(id, arrayObjects){
+  const objSelected = arrayObjects.find( (obj) => obj.id === Number(id) )
 
-  if (selectedService){
-    return selectedService
+  if (objSelected){
+    return objSelected
   }
 
-  return "Servicio no existente"
+  return "Objeto no existente"
 }

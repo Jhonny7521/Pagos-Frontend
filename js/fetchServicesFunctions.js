@@ -1,5 +1,4 @@
 import queryToAPI from "./queryToApi.js";
-import APIDATA from "./apiDataStorage.js";
 
 // Método encargado de enviar el endpoint para obtener las categorías de productos.
 export function getServices(){
@@ -20,7 +19,8 @@ export async function refreshToken(){
     "refresh": localStorage.getItem('refresh_token')
   }
   
-  const apiURL = `http://127.0.0.1:8000/users/jwt/refresh/`;
+  const apiURL = `https://pagos-api-production.up.railway.app/users/jwt/refresh/`;
+  // const apiURL = `http://127.0.0.1:8000/users/jwt/refresh/`;
 
   let fetchData = {
     method: 'POST',

@@ -21,6 +21,8 @@ const APIDATA = {
   payments: [],
   expiredPayments: [],
   selectedService: [],
+  selectedPayment: [],
+  selectedExpiredPayment: [],
   errors: null,
   fetchServices,
   fetchPayments,

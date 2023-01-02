@@ -1,7 +1,8 @@
 import Header from "../components/Header.js";
 import APIDATA from "../js/apiDataStorage.js";
 import DOMHandler from "../js/DOMHandler.js";
-import Home from "./home.js";
+import queryToAPI from "../js/queryToApi.js";
+import Services from "./services.js";
 
 // Función que retorna la estructura de la SPA.
 function view(){
@@ -61,16 +62,25 @@ function updateService() {
     }
     
     try {
-      const response = await queryToAPI(`api/v2/servicios/${serviceId.value}/`, 'PUT', new_service); 
-      const data = await response.json();
+      const data = await queryToAPI(`api/v2/servicios/${serviceId.value}/`, 'PUT', new_service); 
+
+      if(data){
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: 'Se ha actualizado los datos del servicio',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        await APIDATA.fetchServices()
+    
+        DOMHandler.load(Services);
+      }
 
       // console.log(data)
     } catch (error) {
       console.log(error);
     }
-    await APIDATA.fetchServices()
-
-    DOMHandler.load(Home);
   })
 }
 

@@ -28,7 +28,9 @@ function findPaymentAndService(id){
 
 
 function renderExpiredPayments(expired_payment){
-  const servideObj = findPaymentAndService(expired_payment.Payment_user_id)
+  const servideObj = findPaymentAndService(expired_payment.Payment_user_id);
+  const userdata = localStorage.getItem('usuario');
+  const userObj = JSON.parse(userdata);
   return `
     <div class="card border-danger mb-3 p-2">
       <div class="row">
@@ -37,19 +39,21 @@ function renderExpiredPayments(expired_payment){
           <h6 class="card-text">${servideObj.Service_name}</h6>
         </div>
         
-        <div class="col d-flex justify-content-start align-items-center">
+        <div class="col d-flex justify-content-center align-items-center">
           <p class="card-text">${servideObj.payment_expiration_date}</p>
         </div>
-        <div class="col d-flex justify-content-start align-items-center">
+        <div class="col d-flex justify-content-center align-items-center">
           <p class="card-text">${servideObj.payment_amount}</p>
         </div>
-        <div class="col d-flex justify-content-start align-items-center">
+        <div class="col d-flex justify-content-center align-items-center">
           <p class="card-text">${expired_payment.Penalty_fee_amount}</p>
         </div>
         
-        <div class="col d-flex justify-content-start align-items-center">
-          <a href="#" class="card-link">Editar</a>      
-          <a href="#" class="card-link text-danger">Borrar</a>      
+        <div class="col d-flex justify-content-center align-items-center">
+        ${userObj.is_superuser ? `
+          <a href="#" class="card-link editLink2" data-id="${expired_payment.id}">Editar</a>      
+          <a href="#" class="card-link text-danger deleteLink2" data-id="${expired_payment.id}">Borrar</a>      
+        ` : `<p class="card-text text-secondary"><em> Ninguna </em></p>`}
         </div>
       </div>
     </div>

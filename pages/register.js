@@ -19,9 +19,9 @@ const view = () =>{
   </div>
   <br>
   <br>
-  <div class="card mx-auto container-login" style="width: 25rem;">
+  <div class="card mx-auto container-login border-primary shadow-lg p-3 mb-5 bg-body rounded" style="width: 25rem;">
     <div class="d-flex justify-content-center mt-4">
-      <h3 class="card-title">Registrar usuario</h3>
+      <h3 class="card-title text-primary">Registrar usuario</h3>
     </div>
     
     <div class="card-body">
@@ -77,41 +77,86 @@ function RegisterUser() {
     const {first_name, last_name, username, email, password} = e.target.elements
 
     const new_user = {
-      'first_name': first_name,
-      'last_name': last_name,
-      'username': username,
+      'first_name': first_name.value,
+      'last_name': last_name.value,
+      'username': username.value,
       'email': email.value,
       'password': password.value
     }
     
     try {
-      const response = await fetch(`${APIDATA.base_uri}users/signup/`, {
+      let response = await fetch(`${APIDATA.base_uri}users/signup/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify(new_user),
       });
-      const data = await response.json();
-      if (data) {
-        console.log(data);
-        console.log(data.user_data);
-        console.log(data.tokens);
-        // setToken(data.access);
-        const userJson = JSON.stringify(data.user_data);
-        localStorage.setItem('usuario', userJson)
-        localStorage.setItem('auth_token', data.tokens.access)
-        localStorage.setItem('refresh_token', data.tokens.refresh)
+      let data = await response.json();
+      console.log(data);
+      
+      if (data.message === "El usuario se creó correctamente"){
 
-        await APIDATA.fetchServices()
-        await APIDATA.fetchPayments()
-        await APIDATA.fetchExpiredPayments()
+        Swal.fire({
+          title: 'Usuario creado',
+          text: 'El usuario ha sido creado con éxito',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          timer: 3000
+        }).then( async () => {
+
+          const url = `${APIDATA.base_uri}users/login/`
+          const user = { 'email': email.value, 'password': password.value}
+          const options =  {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+          };
+
+          response = await fetch(url, options);
+
+          data = await response.json();
+
+          console.log('data 2', data);
+
+          if (data.message === 'Logeado correctamente') {
+
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: `Bienvenido ${data.user_data.username}`,
+              showConfirmButton: false,
+              timer: 2000
+            })
+            
+            const userJson = JSON.stringify(data.user_data);
+            localStorage.setItem('usuario', userJson)
+            localStorage.setItem('auth_token', data.tokens.access)
+            localStorage.setItem('refresh_token', data.tokens.refresh)
+
+            await APIDATA.fetchServices()
+            await APIDATA.fetchPayments()
+            await APIDATA.fetchExpiredPayments()
+            
+            DOMHandler.load(Home)
+
+          } else {
+            // Muestra una alerta de error
+            Swal.fire({
+              title: 'Error',
+              text: 'El usuario o la contraseña son incorrectos',
+              icon: 'error'
+            });
+          }
+        });
       }
     } catch (error) {
       console.log(error);
     }
 
-    DOMHandler.load(Home)
+    // DOMHandler.load(Home)
   })
 
   const bodyContent = document.querySelector("#change-form")

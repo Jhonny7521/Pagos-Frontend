@@ -6,44 +6,47 @@ import Home from "./home.js";
 
 // Función que retorna la estructura de la SPA.
 function view(){
-  const userdata = localStorage.getItem('usuario')
-  const userObj = JSON.parse(userdata)
+  
+  const payment = APIDATA.selectedPayment;
+  
   return `
   ${Header}
   <div class="card mx-auto container-login" style="width: 25rem;">
     <div class="d-flex justify-content-center mt-4">
-      <h3 class="card-title">Agregar Pago</h3>
+      <h3 class="card-title">Actualizar Pago</h3>
     </div>
 
     <div class="card-body">
-      <form class="register-form">
+      <form class="update-payment-form">
 
         <!-- User id -->
-        <input type="hidden" id="user_id" class="form-control" value="${userObj.id}" />
+        <input type="hidden" id="payment_id" class="form-control" value="${payment.id}" />
+        <input type="hidden" id="user_id" class="form-control" value="${payment.User_id}" />
+        <input type="hidden" id="paymentDate" class="form-control" value="${payment.PaymentDate}" />
 
         <!-- Amount input -->
         <div class="form-outline mb-4">
           <label class="form-label" for="amount">Monto de pago</label>
-          <input type="text" id="amount" class="form-control" />
+          <input type="text" id="amount" class="form-control" value="${payment.Amount}"/>
         </div>
 
         <!-- Expiration date input -->
         <div class="form-outline mb-4">
           <label class="form-label" for="expiration_date">Fecha de expiración</label>
-          <input type="date" id="expiration_date" class="form-control" />
+          <input type="date" id="expiration_date" class="form-control" value="${payment.ExpirationDate}"/>
         </div>
 
         <!-- Service input -->
         <div class="form-outline mb-4">
           <label class="form-label" for="service_id">Servicio</label>
-          <select id="service_id" class="form-select" aria-label="Default select example">
-            <option selected>Seleccione un servicio</option>
+          <select id="service_id" class="form-select" aria-label="Default select example" value="${payment.Service_id}">
+            <option>Seleccione un servicio</option>
             ${ services ? APIDATA.services.map(renderOptions).join("") : "" }
           </select>
         </div>
 
         <div class="d-flex justify-content-center">
-          <button id="create-payment" class="btn btn-primary" type="submit">Realizar pago</button>
+          <button id="update-payment" class="btn btn-primary" type="submit">Actualizar</button>
         </div>
 
       </form>
@@ -53,40 +56,41 @@ function view(){
 }
 
 function renderOptions(service){
-  return `
-    <option value="${service.id}">${service.name}</option>
-  `
+  const payment = APIDATA.selectedPayment
+  let option = `<option value="${service.id}">${service.name}</option>`
+
+  if(payment.Service_id === service.id){
+    option = `<option selected value="${service.id}">${service.name}</option>`
+  }
+  
+  return option
 }
 
-function createPayment() {
+function editPayment() {
 
-  const paymentForm = document.querySelector(".register-form")
+  const paymentForm = document.querySelector(".update-payment-form")
   paymentForm.addEventListener("submit",async (e) => {
     e.preventDefault()
-    const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, '0'); // añade un cero a la izquierda si el día es menor de 10
-    const mes = String(hoy.getMonth() + 1).padStart(2, '0'); //obtiene el mes (0 = enero, 1 = febrero, etc.), añade un cero a la izquierda si el mes es menor de 10
-    const año = hoy.getFullYear();     
-    const fechaActual = año + '-' + mes + '-' + dia; 
     
-    const {user_id, amount, expiration_date, service_id} = e.target.elements
+    const {payment_id, user_id, paymentDate, amount, expiration_date, service_id} = e.target.elements
     
-    const new_payment = {
+    const payment = {
       'User_id': user_id.value,
       'Amount': amount.value,
-      'PaymentDate': fechaActual,
+      'PaymentDate': paymentDate.value,
       'ExpirationDate': expiration_date.value,
       'Service_id': service_id.value
     }
     
     try {
-      const data = await queryToAPI('api/v2/pagos/', 'POST', new_payment);  
+      const data = await queryToAPI(`api/v2/pagos/${payment_id.value}/`, 'PUT', payment);  
       // const data = await response.json();
+      console.log(data)
       if (data){
         Swal.fire({
           icon: 'success',
-          title: 'Correcto',
-          text: 'Se ha creado un nuevo pago',
+          title: 'Actualizado',
+          text: 'Se ha actuaizado el pago',
           showConfirmButton: false,
           timer: 2000
         });
@@ -96,22 +100,20 @@ function createPayment() {
       console.log(error);
     }
     await APIDATA.fetchPayments()
-    await APIDATA.fetchExpiredPayments()
+    // await APIDATA.fetchExpiredPayments()
 
     DOMHandler.load(Home);
   })
 }
 
-// Clase "Home" con los métodos toString() para renderizar los componentes de la SPA y setListeners()
-// que establece los listeners para los eventos de selección de una categoria ó de busqueda de productos
-// por texto.
-const AddPaymet = {
+
+const EditPaymet = {
   toString(){
     return view();
   },
   setListeners(){
     Header.setListeners();
-    createPayment();
+    editPayment();
   }
 }
-export default AddPaymet;
+export default EditPaymet;
